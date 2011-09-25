@@ -4,16 +4,21 @@ var fs = require('fs');
 var vm = require('vm');
 var Path = require('path');
 var jquery = require('jquery');
-var jasmine = require('./libs/jasmine-v1.1.0.js');
-var TerminalReporter = require('./libs/terminal-reporter.js').TerminalReporter;
-var defaultOptions = {
+var jasmine = require('./../libs/jasmine-v1.1.0.js');
+var TerminalReporter = require('./../libs/terminal-reporter.js').TerminalReporter;
+var defaultConfig = {
   jasmine: true,
   DOM: false,
   jQuery: false
-}
+};
+var defaultOptions = {
+  matcher: /\.specs?\.js/i
+};
 
-function runner(folder) {
-  var files = getSpecFiles(folder);
+function runner(folder, options) {
+  options = jquery.extend({}, defaultOptions, options || {});
+  
+  var files = getSpecFiles(folder, options);
   var env = jasmine.jasmine.getEnv();
   env.addReporter(new TerminalReporter({
     color: true
@@ -72,7 +77,7 @@ function setupSandboxConsole(sandbox) {
 }
 
 function setupSandbox(sandbox, options) {
-  options = jquery.extend({}, defaultOptions, options || {});
+  options = jquery.extend({}, defaultConfig, options || {});
 
   if (options.DOM) {
     var doc = jsdom.jsdom('<!doctype html><html><head></head><body></body></html>');
@@ -95,14 +100,16 @@ function setupSandbox(sandbox, options) {
 }
 
 
-function getSpecFiles(folder) {
+function getSpecFiles(folder, options) {
   var files = [];
   var stat = fs.statSync(folder);
   if (stat.isFile()) {
-    files.push(folder);
+    if (options.matcher.test(Path.basename(folder))) {
+      files.push(folder);
+    }
   } else {
     fs.readdirSync(folder).forEach(function(file) {
-      files.push.apply(files, getSpecFiles(Path.join(folder, file)));
+      files.push.apply(files, getSpecFiles(Path.join(folder, file), options));
     });
   }
   return files;

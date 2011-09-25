@@ -1,5 +1,5 @@
 config({
-  load: '../src/animals.js'
+  load: '../specs/fixtures/animals.js'
 });
 
 describe("Cat", function() {

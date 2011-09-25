@@ -1,2 +1,2 @@
-var runner = require('./specking.js').runner;
+var runner = require('./src/specking.js').runner;
 runner('./specs');
