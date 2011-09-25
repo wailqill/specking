@@ -1,2 +1,3 @@
 var runner = require('./src/specking.js').runner;
-runner('./specs');
+var folder = process.argv[2] || './specs';
+runner(folder);
