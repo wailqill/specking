@@ -43,7 +43,6 @@ function runner(folder) {
           }
         });
     
-    console.dir(specFile)
     var spec = fs.readFileSync(specFile, 'utf8');
     var specScript = vm.createScript(spec, specFile);
     // Setup context/sandbox, can't change while running.
