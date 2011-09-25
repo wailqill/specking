@@ -1,0 +1,27 @@
+{
+  "name": "specking",
+  "version": "0.1.0",
+  "description": "A node wrapper for the BDD framework Jasmine, allowing for customized setup for each spec file. This allows for more control over the environment the spec is running in.",
+  "keywords": ["bdd", "spec", "unittest", "jasmine", "test"],
+  "maintainers": [{
+    "name": "Glenn Nilsson",
+    "email": "glenn@tregusti.com",
+    "web": "http://tregusti.com/"
+  }],
+  "licenses": [{
+    "type": "MIT",
+    "url": "http://github.com/wailqill/specking/blob/master/LICENSE.txt"
+  }],
+  "repositories": [{
+    "type": "git",
+    "url": "http://github.com/wailqill/specking.git"
+  }],
+  "dependencies": {
+    "jquery": ">=1.6.0",
+    "jsdom": ">=0.2.4"
+  },
+  "engines": {
+    "node": ">=0.4.10"
+  },
+  "main": "./specking.js"
+}
