@@ -90,7 +90,7 @@ function configFunction(sandbox, specFile) {
         allUserConfigs.push('load');
         if (typeof(arg.load) === 'string')
           loadFileIntoSandbox(specFile, arg.load, sandbox);
-        else if (options.load instanceof Array)
+        else if (arg.load.forEach) // Check with instanceof or typeof is now working here
           arg.load.forEach(function(file) {
             loadFileIntoSandbox(specFile, file, sandbox);
           });
