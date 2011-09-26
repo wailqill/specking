@@ -1,5 +1,6 @@
-config({
-  DOM: false
+Specking.with({
+  DOM: false,
+  jasmine: true
 });
 
 describe("With DOM: false", function() {

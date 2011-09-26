@@ -1,6 +1,7 @@
-config({
-  load: ['fixtures/animals.js', 'fixtures/vehicles.js']
-});
+Specking
+  .with({ jasmine: true })
+  .load('../specs/fixtures/animals.js')
+  .load('../specs/fixtures/vehicles.js');
 
 describe("Multiple file loads", function() {
   it('should load all files', function() {
