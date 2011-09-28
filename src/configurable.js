@@ -56,6 +56,18 @@ Configurable.prototype.with = function(config) {
       d.context.$ = d.context.jQuery;
     }
   }
+  
+  if (config.CommonJS) {
+    d.CommonJS = d.CommonJS || {
+      fakes: {}
+    }
+    for (var key in config.CommonJS) {
+      d.CommonJS[key] = config.CommonJS[key];
+    }
+    d.context.require = function(module) {
+      return d.CommonJS[module];
+    };
+  }
   return this;
 };
 Configurable.prototype.load = function(filepaths) {
