@@ -65,7 +65,26 @@ Configurable.prototype.with = function(config) {
       d.CommonJS[key] = config.CommonJS[key];
     }
     d.context.require = function(module) {
-      return d.CommonJS[module];
+      // Faked module
+      var _ = d.CommonJS[module];
+      if (_) return _;
+      
+      // Real module
+      try {
+        _ = require(module);
+      } catch(e) {
+        _ = null;
+      }
+      if (_) return _;
+      
+      // Load file
+      try {
+        var path = Path.join(d.baseDir, module);
+        _ = require(path);
+      } catch(e) {
+        _ = null;
+      }
+      return _;
     };
   }
   return this;

@@ -11,6 +11,12 @@ describe("CommonJS", function() {
     expect(require).toBeDefined();
   });
   it("should load a fake when specified in the CommonJS object in Specking", function() {
-    expect(require('vm').module).toBe('vm')
+    expect(require('vm').module).toBe('vm');
+  });
+  it("should load the real thing when not specified in the CommonJS object in Specking", function() {
+    expect(require('fs').rename).toBeDefined();
+  });
+  it("should load a real file if specified", function() {
+    expect(require('fixtures/commonjs-module.js').Bubblegum).toBeDefined();
   });
 });
