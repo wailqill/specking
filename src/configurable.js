@@ -111,4 +111,5 @@ Fake.prototype.with =
 Fake.prototype.debug = function() { return this; };
 
 exports.ConfigurableFactory = ConfigurableFactory;
+exports.Configurable = Configurable;
 exports.FakeFactory = new Fake();
