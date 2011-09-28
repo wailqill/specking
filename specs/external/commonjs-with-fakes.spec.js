@@ -17,6 +17,6 @@ describe("CommonJS", function() {
     expect(require('fs').rename).toBeDefined();
   });
   it("should load a real file if specified", function() {
-    expect(require('fixtures/commonjs-module.js').Bubblegum).toBeDefined();
+    expect(require('../fixtures/commonjs-module.js').Bubblegum).toBeDefined();
   });
 });

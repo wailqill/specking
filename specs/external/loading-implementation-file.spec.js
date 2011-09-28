@@ -1,6 +1,6 @@
 Specking
   .with({ jasmine: true })
-  .load('../specs/fixtures/animals.js');
+  .load('../fixtures/animals.js');
 
 describe("Cat", function() {
   it('should eat like an animal', function() {

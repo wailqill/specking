@@ -5,7 +5,7 @@ Specking.with({
 
 describe("ConfigurableFactory", function() {
   var ConfigurableFactory,
-      src = '../src/configurable.js';
+      src = '../../src/configurable.js';
       
   beforeEach(function() {
     ConfigurableFactory = require(src).ConfigurableFactory;
