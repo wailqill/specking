@@ -15,6 +15,7 @@ describe("Configurable", function() {
   it("should be defined", function() {
     expect(Configurable).toBeDefined();
   });
+  
   describe("method 'with'", function() {
     var c, context;
     beforeEach(function() {
@@ -43,6 +44,11 @@ describe("Configurable", function() {
         expect(context.jQuery).toBeDefined();
         expect(context.$).toBeDefined();
       });
-    })
-  })
+    });
+    it("should work with chained invokations", function() {
+      c.with({ jasmine: true }).with({ DOM: true });
+      expect(context.jasmine).toBeDefined();
+      expect(context.HTMLElement).toBeDefined();
+    });
+  });
 });
