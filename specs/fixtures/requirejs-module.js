@@ -1,4 +1,4 @@
-window.define(function() {
+define(function() {
   
   var RequireModule = {
     isModule: true
@@ -7,3 +7,4 @@ window.define(function() {
   return RequireModule;
   
 });
+

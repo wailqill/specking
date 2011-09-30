@@ -95,7 +95,20 @@ Configurable.prototype.with = function(config) {
       return _;
     };
   }
+  
+  if (config.RequireJS) {
+    d.RequireJS = d.RequireJS || {
+      fakes: {}
+    }
+    d.context.define = function(func) {
+      
+    }
+  }
+  
   return this;
+};
+Configurable.prototype.require = function(name, path) {
+  
 };
 Configurable.prototype.load = function(filepaths) {
   if (!filepaths) return this;
