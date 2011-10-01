@@ -8,6 +8,18 @@ var jasmine = require('./../libs/jasmine-v1.1.0.js');
 var Path = require('path');
 
 var data = [];
+var env = {};
+
+function readonly(o, p, v) {
+  Object.defineProperty(o, p, {
+    value: v,
+    writable: false,
+    enumerable: true,
+    configurable: false
+  });
+}
+readonly(env, 'dirname', __dirname);
+
 function arrayify(o) {
   if (!(o instanceof Array || o.forEach))
     o = [o];
@@ -21,12 +33,8 @@ var ConfigurableFactory = {
 };
 
 var Configurable = function(context, specFile, id) {
-  Object.defineProperty(this, "id", {
-    value: id,
-    writable: false,
-    enumerable: true,
-    configurable: true
-  });
+  readonly(this, 'id', id);
+  readonly(this, 'env', env);
   data[this.id] = {
     context: context,
     userConfigs: [],

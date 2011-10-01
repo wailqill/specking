@@ -51,4 +51,12 @@ describe("Configurable", function() {
       expect(context.HTMLElement).toBeDefined();
     });
   });
+  
+  describe("expose the environment", function() {
+    it("should contain the dir of the spec file", function() {
+      var c = new Configurable();
+      var lastPart = c.env.dirname.substr(c.env.dirname.length - 4);
+      expect(lastPart).toBe('/src');
+    });
+  });
 });
