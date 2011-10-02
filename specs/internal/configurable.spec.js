@@ -54,9 +54,24 @@ describe("Configurable", function() {
   
   describe("expose the environment", function() {
     it("should contain the dir of the spec file", function() {
+      var c = new Configurable({}, 'specs/internal/configurable.spec.js');
+      var lastPart = c.env.specdir.substr(c.env.specdir.length - 15);
+      expect(lastPart).toBe('/specs/internal');
+    });
+  });
+  
+  describe("RequireJS support", function() {
+    it("should throw when using require method when not using RequireJS", function() {
       var c = new Configurable();
-      var lastPart = c.env.dirname.substr(c.env.dirname.length - 4);
-      expect(lastPart).toBe('/src');
+      expect(c.require).toThrow();
+    });
+    it("should load a RequireJS module with the require method and expose it", function() {
+      var context = {};
+      var c = new Configurable(context, 'specs/internal/configurable.spec.js')
+        .with({ RequireJS: true })
+        .require('ModuleName', '../fixtures/requirejs-module.js');
+      
+      expect(context.ModuleName.isModule).toBeTruthy();
     });
   });
 });

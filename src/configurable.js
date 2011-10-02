@@ -8,7 +8,6 @@ var jasmine = require('./../libs/jasmine-v1.1.0.js');
 var Path = require('path');
 
 var data = [];
-var env = {};
 
 function readonly(o, p, v) {
   Object.defineProperty(o, p, {
@@ -17,29 +16,31 @@ function readonly(o, p, v) {
     enumerable: true,
     configurable: false
   });
-}
-readonly(env, 'dirname', __dirname);
+};
 
 function arrayify(o) {
   if (!(o instanceof Array || o.forEach))
     o = [o];
   return o;
-}
+};
 
 var ConfigurableFactory = {
-  create: function(context, specFile) {
-    return new Configurable(context, specFile, data.length);
+  create: function(context, specPath) {
+    return new Configurable(context, specPath, data.length);
   }
 };
 
-var Configurable = function(context, specFile, id) {
+var Configurable = function(context, specPath, id) {
   readonly(this, 'id', id);
-  readonly(this, 'env', env);
-  data[this.id] = {
+  var d = data[this.id] = {
     context: context,
     userConfigs: [],
-    baseDir: Path.dirname(Path.resolve(specFile))
+    specdir: Path.dirname(Path.resolve(specPath)),
+    blah: specPath
   };
+  var env = {};
+  readonly(env, 'specdir', d.specdir);
+  readonly(this, 'env', env);
 };
 
 Configurable.prototype.with = function(config) {
@@ -87,7 +88,7 @@ Configurable.prototype.with = function(config) {
       
       // Load file
       try {
-        var path = Path.join(d.baseDir, module);
+        var path = Path.join(d.specdir, module);
         _ = require(path);
       } catch(e) {
         _ = null;
@@ -100,22 +101,28 @@ Configurable.prototype.with = function(config) {
     d.RequireJS = d.RequireJS || {
       fakes: {}
     }
-    d.context.define = function(func) {
-      
-    }
   }
-  
   return this;
 };
 Configurable.prototype.require = function(name, path) {
-  
-};
+  var d = data[this.id];
+  if (!d.RequireJS) throw new Error("RequireJS is not loaded.");
+
+  var fullPath = Path.resolve(Path.join(d.specdir, path));
+  var module = null;
+  d.context.define = function(func) {
+    module = func();
+  }
+  var code = fs.readFileSync(fullPath, 'utf8');
+  vm.runInNewContext(code, d.context, fullPath);
+  d.context[name] = module;
+}
 Configurable.prototype.load = function(filepaths) {
   if (!filepaths) return this;
 
   var d = data[this.id];
   arrayify(filepaths).forEach(function(relativePath) {
-    var fullPath = Path.normalize(d.baseDir + "/" + relativePath);
+    var fullPath = Path.normalize(d.specdir + "/" + relativePath);
     var code = fs.readFileSync(fullPath, 'utf8');
     vm.runInNewContext(code, d.context, fullPath);
   });
@@ -127,6 +134,7 @@ Configurable.prototype.debug = function() {
 }
 
 var Fake = function() {};
+Fake.prototype.require =
 Fake.prototype.load =
 Fake.prototype.with =
 Fake.prototype.debug = function() { return this; };

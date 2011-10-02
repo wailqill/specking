@@ -1,10 +1,8 @@
 define(function() {
   
-  var RequireModule = {
+  return {
     isModule: true
   };
-  
-  return RequireModule;
-  
+
 });
 
