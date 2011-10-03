@@ -17,6 +17,6 @@ describe("ConfigurableFactory", function() {
   
   it("should create a configurable", function() {
     var c = ConfigurableFactory.create({}, 'fake.spec.js');
-    expect(c.constructor).toBe(require(src).Configurable);
+    expect(c).toBeDefined();
   });
 });

@@ -18,7 +18,7 @@ function readonly(o, p, v) {
     configurable: false
   });
 }
-readonly(env, 'dirname', __dirname);
+// readonly(env, 'dirname', __dirname);
 
 function arrayify(o) {
   if (!(o instanceof Array || o.forEach))
@@ -41,6 +41,44 @@ var Configurable = function(context, specFile, id) {
     baseDir: Path.dirname(Path.resolve(specFile))
   };
 };
+
+
+
+
+var wrappedRequire = function(specdir, fakes, dependency) {
+  var path = Path.join(specdir, dependency);
+
+  // Check if the module is a fake
+  // pp("wrappedRequire " + path)
+  var _ = fakes[dependency];
+  if (_) return _;
+
+  // Check if the file exists on disk, if so load it up with the same
+  // wrappedRequire method available.
+  if (Path.existsSync(path) && fs.statSync(path).isFile()) {
+    try {
+      var code = fs.readFileSync(path, 'utf8'),
+          code = '(function(require, exports, __filename) {' + code + '})';
+      _ = {};
+      vm.runInThisContext(code, path)(wrappedRequire.curry(specdir, fakes), _, path);
+      return _;
+    } catch(e) {
+    }
+  }
+  // Else load it as a real module.
+  try {
+    _ = require(dependency);
+  } catch(e) {
+    _ = null;
+  }
+  // pp(indent + 'return real module')
+  return _;
+};
+
+
+
+
+
 
 Configurable.prototype.with = function(config) {
   var d = data[this.id];
@@ -70,30 +108,9 @@ Configurable.prototype.with = function(config) {
       fakes: {}
     }
     for (var key in config.CommonJS) {
-      d.CommonJS[key] = config.CommonJS[key];
+      d.CommonJS.fakes[key] = config.CommonJS[key];
     }
-    d.context.require = function(module) {
-      // Faked module
-      var _ = d.CommonJS[module];
-      if (_) return _;
-      
-      // Real module
-      try {
-        _ = require(module);
-      } catch(e) {
-        _ = null;
-      }
-      if (_) return _;
-      
-      // Load file
-      try {
-        var path = Path.join(d.baseDir, module);
-        _ = require(path);
-      } catch(e) {
-        _ = null;
-      }
-      return _;
-    };
+    d.context.require = wrappedRequire.curry(d.baseDir, d.CommonJS.fakes);
   }
   return this;
 };
