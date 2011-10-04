@@ -10,6 +10,7 @@ exports.require = function(path, name) {
     var module = {};
     f(module, require);
     this.context[name] = module;
+  } else {
   }
   return this;
 };

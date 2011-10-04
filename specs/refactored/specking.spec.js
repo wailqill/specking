@@ -7,10 +7,12 @@ Specking
 
 describe("Specking", function() {
   describe('.with()', function () {
+    
     it("should be chainable", function() {
       var s = new Module.Specking();
       expect(s.with()).toBe(s);
     });
+    
     describe('with jasmine:true', function() {
       var context = {};
       new Module.Specking(context).with({ jasmine: true });
@@ -28,6 +30,7 @@ describe("Specking", function() {
         expect(context.afterEach).toBeDefined();
       });
     });
+    
     describe('with jQuery', function() {
       var context, s;
       beforeEach(function() {
@@ -52,21 +55,27 @@ describe("Specking", function() {
   });
   
   
-  describe('without CommonJS', function() {
-    it('should not expose a require method', function() {
-      var s = new Module.Specking();
+  describe('CommonJS', function() {
+    var context, s;
+    beforeEach(function() {
+      context = {};
+      s = new Module.Specking(context, __filename);
+    });
+    it('should not expose a require method when not specified', function() {
       expect(s.require).not.toBeDefined();
     });
-  });
-  describe('with CommonJS', function() {
     describe("'require' method", function() {
+      beforeEach(function() {
+        s.with({ CommonJS: true });
+      });
       it("should be chainable", function() {
-        var s = new Module.Specking().with({ CommonJS: true });
         expect(s.require()).toBe(s);
       });
       it('should load a CommonJS module and expose it as requested', function() {
-        expect(Module.Specking).toBeDefined();
+        s.require('../fixtures/commonjs-module.js', 'Module')
+        expect(context.Module.Bubblegum).toBeDefined();
       });
+      it()
     });
   });
 });

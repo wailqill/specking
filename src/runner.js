@@ -13,11 +13,11 @@ var SpecRunner = require('./spec-runner.js').SpecRunner;
 // var klasses = require('./configurable.js');
 var tooling = require('./tooling.js');
 
-var defaultConfig = {
-  jasmine: true,
-  DOM: false,
-  jQuery: false
-};
+// var defaultConfig = {
+//   jasmine: true,
+//   DOM: false,
+//   jQuery: false
+// };
 var defaultOptions = {
   matcher: /\.specs?\.js/i
 };
@@ -39,6 +39,22 @@ function runner(folder, options) {
   
   env.execute();
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 function singleSpecRunner(env, options, specFile) {
   // Define the real config used when running the specs.

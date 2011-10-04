@@ -11,11 +11,11 @@ function SpecRunner(specpath) {
   this.specpath = specpath;
   var f = loadFileAsFunction(specpath);
   if (f) {
-    f(contextRetriever.curry(this));
+    f(speckingCreator.curry(this), specpath, Path.dirname(specpath));
   }
 };
 
-function contextRetriever(sr, context) {
+function speckingCreator(sr, context) {
   context.Specking = new Specking(context, sr.specpath);
 };
 
@@ -24,7 +24,7 @@ function loadFileAsFunction(path) {
   if (Path.existsSync(path) && fs.statSync(path).isFile()) {
     try {
       var code = fs.readFileSync(path, 'utf8'),
-          wrappedCode = '(function(__setupContext) { __setupContext(this);' + code + '})';
+          wrappedCode = '(function(__setupContext, __filename, __dirname) { __setupContext(this);' + code + '})';
       func = vm.runInThisContext(wrappedCode, path);
     } catch(e) {
     }
