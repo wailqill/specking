@@ -6,4 +6,13 @@ function prettyPrint() {
   });
 }
 
+function mergeObjects(output) {
+  Array.prototype.slice.call(arguments, 1).forEach(function(o) {
+    Object.keys(o).forEach(function(key) {
+      output[key] = o[key];
+    });
+  });
+}
+
 exports.pp = prettyPrint
+exports.merge = mergeObjects;

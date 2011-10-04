@@ -1,88 +1,50 @@
-require('./../libs/Function.prototype.js');
-
-var jsdom = require('jsdom');
-var sys = require('sys');
+var Path = require('path');
 var fs = require('fs');
 var vm = require('vm');
-var Path = require('path');
-var jquery = require('jquery');
-var util = require('util');
+var pp = require('./tooling.js').pp;
+var merge = require('./tooling.js').merge;
+var extCommonJS = require('./commonjs.js');
 var jasmine = require('./../libs/jasmine-v1.1.0.js');
-var TerminalReporter = require('./../libs/terminal-reporter.js').TerminalReporter;
-var klasses = require('./configurable.js');
-var tooling = require('./tooling.js');
 
-var defaultConfig = {
-  jasmine: true,
-  DOM: false,
-  jQuery: false
+function Specking(context, specpath) {
+  this.specpath = specpath;
+  this.context = context;
 };
-var defaultOptions = {
-  matcher: /\.specs?\.js/i
-};
-
-function runner(folder, options) {
-  options = jquery.extend({}, defaultOptions, options || {});
+Specking.prototype.with = function(config) {
+  config = config || {};
   
-  var files = getSpecFiles(folder, options);
-  var env = jasmine.jasmine.getEnv();
-  env.addReporter(new TerminalReporter({
-    color: true
-  }));
+  // if (config.DOM) {
+  //   d.userConfigs.push('DOM');
+  //   var doc = jsdom.jsdom('<!doctype html><html><head></head><body></body></html>');
+  //   var win = doc.createWindow();
+  //   jquery.extend(d.context, win);
+  // }
   
-  files.forEach(singleSpecRunner.curry(env, options));
-  
-  env.execute();
-};
-
-function singleSpecRunner(env, options, specFile) {
-  // Define the real config used when running the specs.
-  var realSandbox = {
-    // No-op implementation of config function.
-    Specking: klasses.FakeFactory,
-    pp: tooling.pp
-  };
-  // Add console support to the real sandbox.
-  configureConsoleForSandbox(realSandbox);
-  
-  // Create "config sandbox" for running the config contents of the real sandbox.
-  var configSandbox = {
-    Specking: klasses.ConfigurableFactory.create(realSandbox, specFile)
-  };
-  configureConsoleForSandbox(configSandbox);
-  
-  var specCode = fs.readFileSync(specFile, 'utf8');
-  var specScript = vm.createScript(specCode, specFile);
-  // Setup context/sandbox, can't change while running.
-  // Wrap in try/catch to cater for 'describe' or other test
-  // framework code not available in the sandbox.
-  try {
-    specScript.runInNewContext(configSandbox);
-  } catch(e) {
+  if (config.jasmine) {
+    // d.userConfigs.push('jasmine');
+    merge(this.context, jasmine);
   }
   
-  specScript.runInNewContext(realSandbox);
-};
-
-function configureConsoleForSandbox(sandbox) {
-  sandbox.console = sandbox.console || console;
-  sandbox.console.dir = sandbox.console.dir || console.dir;
-};
-
-function getSpecFiles(folder, options) {
-  var files = [];
-  var stat = fs.statSync(folder);
-  if (stat.isFile()) {
-    if (options.matcher.test(Path.basename(folder))) {
-      files.push(folder);
-    }
-  } else {
-    fs.readdirSync(folder).forEach(function(file) {
-      files.push.apply(files, getSpecFiles(Path.join(folder, file), options));
-    });
+  
+  // if (config.jQuery) {
+  //   d.userConfigs.push('jQuery');
+  //   d.context.jQuery = jquery;
+  //   if (config.jQuery === "$") {
+  //     d.context.$ = d.context.jQuery;
+  //   }
+  // }
+  
+  if (config.CommonJS) {
+    Specking.prototype.require = extCommonJS.require;
   }
-  return files;
-}
+  
+  return this;
+};
+
+Specking.prototype.debug =
+Specking.prototype.load = function() {
+  return this;
+};
 
 
-exports.runner = runner;
+exports.Specking = Specking;
