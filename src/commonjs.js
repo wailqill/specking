@@ -3,7 +3,7 @@ var fs = require('fs');
 var vm = require('vm');
 var pp = require('./tooling.js').pp;
 
-exports.require = function(path, name) {
+exports.require = function(name, path) {
   path = Path.resolve(Path.join(Path.dirname(this.specpath), path));
   var f = loadFileAsFunction(path);
   if (f) {
@@ -12,6 +12,12 @@ exports.require = function(path, name) {
     this.context[name] = module;
   } else {
   }
+  return this;
+};
+
+exports.define = function(name, module) {
+  this.context[name] = module;
+  
   return this;
 };
 

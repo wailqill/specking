@@ -33,7 +33,8 @@ Specking.prototype.with = function(config) {
   }
     
   if (config.CommonJS) {
-    Specking.prototype.require = extCommonJS.require;
+    this.require = extCommonJS.require;
+    this.define = extCommonJS.define;
   }
   
   return this;
