@@ -14,8 +14,39 @@ describe("Specking", function() {
     describe('with jasmine:true', function() {
       var context = {};
       new Module.Specking(context).with({ jasmine: true });
+      
       it('should expose describe', function() {
         expect(context.describe).toBeDefined();
+      });
+      it('should expose it', function() {
+        expect(context.it).toBeDefined();
+      });
+      it('should expose beforeEach', function() {
+        expect(context.beforeEach).toBeDefined();
+      });
+      it('should expose afterEach', function() {
+        expect(context.afterEach).toBeDefined();
+      });
+    });
+    describe('with jQuery', function() {
+      var context, s;
+      beforeEach(function() {
+        context = {};
+        s = new Module.Specking(context);
+      });
+      
+      it('should not load jQuery if not specified', function() {
+        expect(context.jQuery).not.toBeDefined();
+      });
+      it('should load jQuery if set to true', function() {
+        s.with({ jQuery: true });
+        expect(context.jQuery).toBeDefined();
+        expect(context.$).not.toBeDefined();
+      });
+      it('should load jQuery as $ too if set to $', function() {
+        s.with({ jQuery: '$' });
+        expect(context.jQuery).toBeDefined();
+        expect(context.$).toBeDefined();
       });
     });
   });
