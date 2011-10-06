@@ -47,6 +47,11 @@ Specking.prototype.load = function(path) {
   vm.runInNewContext(code, this.context);
 };
 
+Specking.prototype.do = function(func) {
+  var code = '(' + func.toString() + ')()';
+  vm.runInNewContext(code, this.context);
+};
+
 Specking.prototype.debug = function() {
   return this;
 };

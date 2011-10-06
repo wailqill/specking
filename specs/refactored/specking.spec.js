@@ -63,6 +63,17 @@ describe("Specking", function() {
     })
   });
   
+  describe('.do()', function() {
+    it('should execute arbitrary code', function() {
+      var context = {};
+      s = new Module.Specking(context, __filename);
+      s.do(function() {
+        this.Pixel = true;
+      });
+      expect(context.Pixel).toBe(true);
+    })
+  });
+  
   
   describe('CommonJS', function() {
     var context, s;
