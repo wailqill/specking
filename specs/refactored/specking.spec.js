@@ -54,6 +54,15 @@ describe("Specking", function() {
     });
   });
   
+  describe('.load()', function() {
+    it('should load a file from disk into global scope', function() {
+      var context = {};
+      s = new Module.Specking(context, __filename);
+      s.load('../fixtures/animals.js');
+      expect(context.Cat).toBeDefined();
+    })
+  });
+  
   
   describe('CommonJS', function() {
     var context, s;

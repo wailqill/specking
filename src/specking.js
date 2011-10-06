@@ -40,8 +40,14 @@ Specking.prototype.with = function(config) {
   return this;
 };
 
-Specking.prototype.debug =
-Specking.prototype.load = function() {
+Specking.prototype.load = function(path) {
+  var self = this;
+  var fullpath = Path.resolve(Path.join(Path.dirname(self.specpath), path));
+  var code = fs.readFileSync(fullpath, 'utf8');
+  vm.runInNewContext(code, this.context);
+};
+
+Specking.prototype.debug = function() {
   return this;
 };
 
