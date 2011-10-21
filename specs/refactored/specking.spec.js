@@ -46,8 +46,8 @@ describe("Specking", function() {
         expect(context.jQuery).toBeDefined();
         expect(context.$).not.toBeDefined();
       });
-      it('should load jQuery as $ too if set to $', function() {
-        s.with({ jQuery: '$' });
+      it("should load jQuery as $ too if set to $", function() {
+        s.with({ jQuery: "$" });
         expect(context.jQuery).toBeDefined();
         expect(context.$).toBeDefined();
       });

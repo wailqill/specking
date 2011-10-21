@@ -11,7 +11,7 @@ var jasmine = require('./../libs/jasmine-v1.1.0.js');
 var TerminalReporter = require('./../libs/terminal-reporter.js').TerminalReporter;
 var SpecRunner = require('./spec-runner.js').SpecRunner;
 // var klasses = require('./configurable.js');
-var tooling = require('./tooling.js');
+var tooling = require('./tools.js');
 
 // var defaultConfig = {
 //   jasmine: true,

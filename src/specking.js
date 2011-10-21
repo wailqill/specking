@@ -2,8 +2,8 @@ var Path = require('path');
 var fs = require('fs');
 var jquery = require('jquery');
 var vm = require('vm');
-var pp = require('./tooling.js').pp;
-var merge = require('./tooling.js').merge;
+var tools = require('./tools.js');
+var pp = require('./tools.js').pp;
 var extCommonJS = require('./commonjs.js');
 var jasmine = require('./../libs/jasmine-v1.1.0.js');
 
@@ -21,7 +21,7 @@ Specking.prototype.with = function(config) {
   // }
   
   if (config.jasmine) {
-    merge(this.context, jasmine);
+    tools.merge(this.context, jasmine);
   }
   
   

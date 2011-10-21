@@ -1,16 +1,16 @@
 var Path = require('path');
 var fs = require('fs');
 var vm = require('vm');
-var pp = require('./tooling.js').pp;
+var tools = require('./tools.js');
 
 exports.require = function(name, path) {
   path = Path.resolve(Path.join(Path.dirname(this.specpath), path));
-  var f = loadFileAsFunction(path);
+  var template = '(function(exports, require) { ##code## })';
+  var f = tools.loadFileAsFunction(path, template);
   if (f) {
     var module = {};
     f(module, require);
     this.context[name] = module;
-  } else {
   }
   return this;
 };
@@ -20,16 +20,3 @@ exports.define = function(name, module) {
   
   return this;
 };
-
-function loadFileAsFunction(path) {
-  var func = null;
-  if (Path.existsSync(path) && fs.statSync(path).isFile()) {
-    try {
-      var code = fs.readFileSync(path, 'utf8'),
-          wrappedCode = '(function(exports, require) {' + code + '})';
-      func = vm.runInThisContext(wrappedCode, path);
-    } catch(e) {
-    }
-  }
-  return func;
-}
