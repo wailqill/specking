@@ -35,7 +35,7 @@ Specking.prototype.with = function(config) {
   if (config.CommonJS) {
     this.require = extCommonJS.speckingRequire;
     this.define = extCommonJS.speckingDefine;
-    this.context.require = extCommonJS.contextRequire;
+    this.context.require = extCommonJS.contextRequire.curry(this);
   }
   
   return this;
