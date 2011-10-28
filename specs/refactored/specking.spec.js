@@ -8,10 +8,10 @@ Specking
 describe("Specking", function() {
   describe('.with()', function () {
     
-    // it("should be chainable", function() {
-    //   var s = new Module.Specking();
-    //   expect(s.with()).toBe(s);
-    // });
+    it("should be chainable", function() {
+      var s = new Module.Specking();
+      expect(s.with()).toBe(s);
+    });
   //   
   //   describe('with jasmine:true', function() {
   //     var context = {};
