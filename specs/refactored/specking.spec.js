@@ -12,24 +12,24 @@ describe("Specking", function() {
       var s = new Module.Specking();
       expect(s.with()).toBe(s);
     });
-  //   
-  //   describe('with jasmine:true', function() {
-  //     var context = {};
-  //     new Module.Specking(context).with({ jasmine: true });
-  //     
-  //     it('should expose describe', function() {
-  //       expect(context.describe).toBeDefined();
-  //     });
-  //     it('should expose it', function() {
-  //       expect(context.it).toBeDefined();
-  //     });
-  //     it('should expose beforeEach', function() {
-  //       expect(context.beforeEach).toBeDefined();
-  //     });
-  //     it('should expose afterEach', function() {
-  //       expect(context.afterEach).toBeDefined();
-  //     });
-  //   });
+    
+    describe('with jasmine:true', function() {
+      var context = {};
+      new Module.Specking(context).with({ jasmine: true });
+      
+      it('should expose describe', function() {
+        expect(context.describe).toBeDefined();
+      });
+      it('should expose it', function() {
+        expect(context.it).toBeDefined();
+      });
+      it('should expose beforeEach', function() {
+        expect(context.beforeEach).toBeDefined();
+      });
+      it('should expose afterEach', function() {
+        expect(context.afterEach).toBeDefined();
+      });
+    });
   //   
   //   describe('with jQuery', function() {
   //     var context, s;
