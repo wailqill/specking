@@ -3,7 +3,7 @@ Specking
     jasmine: true,
     CommonJS: true
   })
-  .require('Module', '../../src/specking.js');
+  .require('../../src/specking.js', 'Module');
 
 describe("Specking", function() {
   describe('.with()', function () {
@@ -92,7 +92,7 @@ describe("Specking", function() {
         expect(s.require()).toBe(s);
       });
       it('should load a CommonJS module and expose it as requested', function() {
-        s.require('Module', '../fixtures/commonjs-module.js')
+        s.require('../fixtures/commonjs-module.js', 'Module')
         expect(context.Module.Bubblegum).toBeDefined();
       });
     });
@@ -106,10 +106,13 @@ describe("Specking", function() {
       it('should expose a define method', function() {
         expect(s.define).toBeDefined();
       });
-      it('should use a fake module if defined', function() {
-        s.define('Module', { Glenn: "" });
-        expect(context.Module.Glenn).toBe("");
-      });
+      // it('should use a fake module if defined', function() {
+      //   s.define('/tmp/module.js', { Glenn: "" });
+      //   expect(context.require('/tmp/module.js').Glenn).toBe("");
+      // });
+      // it('should use the fake module in dependencies too', function() {
+      //   
+      // });
     })
   });
 });

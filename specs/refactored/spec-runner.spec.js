@@ -3,7 +3,7 @@ Specking
     jasmine: true,
     CommonJS: true
   })
-  .require('SpecRunner', '../../src/spec-runner.js');
+  .require('../../src/spec-runner.js', 'SpecRunner');
   
 describe("test", function() {
   it("teststs", function() {
