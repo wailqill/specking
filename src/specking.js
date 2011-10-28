@@ -33,9 +33,9 @@ Specking.prototype.with = function(config) {
   }
     
   if (config.CommonJS) {
-    this.require = extCommonJS.require;
-    this.define = extCommonJS.define;
-    this.context.require = extCommonJS.require;
+    this.require = extCommonJS.speckingRequire;
+    this.define = extCommonJS.speckingDefine;
+    this.context.require = extCommonJS.contextRequire;
   }
   
   return this;

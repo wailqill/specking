@@ -3,15 +3,21 @@ var fs = require('fs');
 var vm = require('vm');
 var tools = require('./tools.js');
 
-function speckingRequire(path, name) {
+function getExportsFromFile(path) {
   path = Path.resolve(Path.join(Path.dirname(this.specpath), path));
   var template = '(function(exports, require) { ##code## })';
   var f = tools.loadFileAsFunction(path, template);
   if (f) {
     var module = {};
-    f(module, require);
-    this.context[name] = module;
+    f(module, contextRequire);
+    return module;
   }
+  return null;
+};
+
+function speckingRequire(path, name) {
+  var module = getExportsFromFile(path);
+  this.context[name] = module;
   return this;
 };
 
@@ -25,5 +31,10 @@ function speckingDefine(path, module) {
   return this;
 };
 
-exports.define = speckingDefine;
-exports.require = speckingRequire;
+function contextRequire(path) {
+  return getExportsFromFile(path);
+};
+
+exports.speckingDefine = speckingDefine;
+exports.speckingRequire = speckingRequire;
+exports.contextRequire = contextRequire;
