@@ -22,8 +22,8 @@ function loadFileAsFunction(path, template) {
   if (Path.existsSync(path) && fs.statSync(path).isFile()) {
     try {
       var code = fs.readFileSync(path, 'utf8'),
-          wrappedCode = template.replace(/##code##/g, code);
-      // prettyPrint(wrappedCode)
+          wrappedCode = template.replace(/##code##/g, "\n" + code + "\n");
+      // prettyPrint('', '', '', wrappedCode)
       func = vm.runInThisContext(wrappedCode, path);
     } catch(e) {
       prettyPrint(e.stack)
