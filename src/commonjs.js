@@ -3,7 +3,7 @@ var fs = require('fs');
 var vm = require('vm');
 var tools = require('./tools.js');
 
-exports.require = function(path, name) {
+function speckingRequire(path, name) {
   path = Path.resolve(Path.join(Path.dirname(this.specpath), path));
   var template = '(function(exports, require) { ##code## })';
   var f = tools.loadFileAsFunction(path, template);
@@ -15,7 +15,7 @@ exports.require = function(path, name) {
   return this;
 };
 
-exports.define = function(path, module) {
+function speckingDefine(path, module) {
   path = Path.resolve(Path.join(Path.dirname(this.specpath), path));
   this.CommonJS = this.CommonJS || {
     fakes: {}
@@ -24,3 +24,6 @@ exports.define = function(path, module) {
   
   return this;
 };
+
+exports.define = speckingDefine;
+exports.require = speckingRequire;
