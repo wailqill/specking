@@ -9,7 +9,7 @@ describe("Specking", function() {
   describe('.with()', function () {
     
     it("should be chainable", function() {
-      var s = new Module.Specking();
+      var s = new Module.Specking({});
       expect(s.with()).toBe(s);
     });
     
