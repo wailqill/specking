@@ -7,9 +7,12 @@ var pp = require('./tools.js').pp;
 var extCommonJS = require('./commonjs.js');
 var jasmine = require('./../libs/jasmine-v1.1.0.js');
 
+var counter = 0;
 function Specking(context, specpath) {
   this.specpath = specpath;
   this.context = context;
+  this._id = counter++;
+  this.context._specking_id = this._id;
 };
 Specking.prototype.with = function(config) {
   config = config || {};
@@ -34,7 +37,7 @@ Specking.prototype.with = function(config) {
     
   if (config.CommonJS) {
     this.require = extCommonJS.speckingRequire.curry(this);
-    this.define = extCommonJS.speckingDefine;
+    this.define = extCommonJS.speckingDefine.curry(this);
     this.context.require = extCommonJS.contextRequire.curry(this);
   }
   

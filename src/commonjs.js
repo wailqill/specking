@@ -3,8 +3,12 @@ var fs = require('fs');
 var vm = require('vm');
 var tools = require('./tools.js');
 
+function getFullPath(specking, relativePath) {
+  return Path.resolve(Path.join(Path.dirname(specking.specpath), relativePath));
+};
+
 function getExportsFromFile(specking, path) {
-  var fullpath = Path.resolve(Path.join(Path.dirname(specking.specpath), path));
+  var fullpath = getFullPath(specking, path);
   var template = '(function(exports, require) { ##code## })';
   var f = tools.loadFileAsFunction(fullpath, template);
   if (f) {
@@ -21,25 +25,24 @@ function speckingRequire(specking, path, name) {
   return specking;
 };
 
-function speckingDefine(path, module) {
-  path = Path.resolve(Path.join(Path.dirname(this.specpath), path));
-  this.CommonJS = this.CommonJS || {
+function speckingDefine(specking, path, module) {
+  var fullpath = getFullPath(specking, path);
+  specking.CommonJS = specking.CommonJS || {
     fakes: {}
   };
-  this.CommonJS.fakes[path] = module;
-  
-  return this;
+  specking.CommonJS.fakes[path] = module;
+  return specking;
 };
 
 function contextRequire(specking, dependency) {
-  var fullpath = Path.resolve(Path.join(Path.dirname(specking.specpath), dependency));
+  var fullpath = getFullPath(specking, dependency);
   var module;
   
   // Check if the module is a fake
   // pp("wrappedRequire " + path)
-  // if (dependency in specking.CommonJS.fakes) {
-  //   return specking.CommonJS.fakes[dependency];
-  // }
+  if (specking.CommonJS && (dependency in specking.CommonJS.fakes)) {
+    return specking.CommonJS.fakes[dependency];
+  }
     
   
   // Check if the file exists on disk, if so load it up with the same
